@@ -7,6 +7,7 @@ export class ApiClienteService {
   constructor(private readonly httpService: HttpService) {}
 
   buscaCliente(params: BuscaClienteParams): Promise<string> {
+    // TODO: buscar cliente real na API
     return new Promise((resolve) => {
       if (params.cpf === '19100000000') {
         resolve('teste@teste.com');

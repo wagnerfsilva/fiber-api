@@ -1,5 +1,5 @@
 export type CodigosValidaEmail = {
-  codigo: string;
+  codigo: number;
   cpf: string;
   tentativas: number;
 };
@@ -14,7 +14,7 @@ export type FindUniqueProps = {
 
 export type CreateProps = {
   data: {
-    codigo: string;
+    codigo: number;
     tentativas: number;
   };
   where: WhereUnique;
@@ -22,7 +22,7 @@ export type CreateProps = {
 
 export type UpdateProps = {
   data: {
-    codigo: string;
+    codigo: number;
     tentativas: number;
   };
   where: WhereUnique;

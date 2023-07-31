@@ -71,7 +71,7 @@ export class LoginService {
     });
 
     const payload = {
-      cpf: codigoValidaEmail.cpf,
+      cpf: body.cpf,
       // TODO: colocar id do cliente
     };
 

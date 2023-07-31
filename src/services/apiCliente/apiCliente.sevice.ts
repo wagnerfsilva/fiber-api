@@ -10,7 +10,7 @@ export class ApiClienteService {
     // TODO: buscar cliente real na API
     return new Promise((resolve) => {
       if (params.cpf === '19100000000') {
-        resolve('teste@teste.com');
+        resolve('igor_goncalves_ferrari@hotmail.com');
       } else {
         resolve('');
       }

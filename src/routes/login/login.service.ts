@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
 import { SolicitaCodigoLoginBody } from './dtos/solicita-codigo-login-body.dto';
 import { ApiClienteService } from 'src/services/apiCliente/apiCliente.sevice';
 import { CodigosValidaEmailRepositorio } from 'src/repositorios/codigosValidaEmail-repositorio';
@@ -69,7 +70,16 @@ export class LoginService {
       },
     });
 
-    // TODO: implementar token
-    return { token: '1234' };
+    const payload = {
+      cpf: codigoValidaEmail.cpf,
+      // TODO: colocar id do cliente
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET || '', {
+      algorithm: 'HS256',
+      expiresIn: '2h',
+    });
+
+    return { token };
   }
 }

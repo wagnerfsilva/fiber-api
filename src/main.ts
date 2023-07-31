@@ -36,6 +36,17 @@ async function bootstrap() {
     .setDescription(process.env.npm_package_description || '')
     .setVersion(process.env.npm_package_version || '')
     .addCookieAuth('token')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'jwt',
+    )
     // .addTag('cats')
     .build();
 

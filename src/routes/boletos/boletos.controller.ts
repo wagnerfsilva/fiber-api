@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCookieAuth,
@@ -6,8 +6,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BoletosService } from './boletos.service';
-import { BoletosResponse } from './dtos/boletos-response.dto';
+import { BoletosReceberResponse } from './dtos/boletosReceber-response.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Request } from 'express';
 
 @ApiTags('Boletos')
 @Controller('/boletos')
@@ -15,18 +16,20 @@ export class BoletosController {
   constructor(private readonly boletosService: BoletosService) {}
 
   /**
-   * Retorna um array com boletos
+   * Retorna um array com boletos receber
    */
   @ApiResponse({
     status: 200,
-    description: 'Um objeto com o array de boletos',
-    type: BoletosResponse,
+    description: 'Um objeto com o array de boletos receber',
+    type: BoletosReceberResponse,
   })
   @ApiCookieAuth()
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @Get()
-  obtemBoletos(): Promise<BoletosResponse> {
-    return this.boletosService.obtemBoletos();
+  obtemBoletosReceber(
+    @Req() request: Request,
+  ): Promise<BoletosReceberResponse> {
+    return this.boletosService.obtemBoletosReceber(request);
   }
 }

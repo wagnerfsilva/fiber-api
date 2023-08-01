@@ -13,17 +13,6 @@ export class ApiClienteService {
   async buscaCliente(
     params: BuscaClienteParams,
   ): Promise<BuscaClienteResponse> {
-    // TODO: buscar cliente real na API
-    if (params.cpf === '19100000000') {
-      return new Promise((resolve) => {
-        resolve({
-          id: '1234',
-          cnpj_cpf: params.cpf,
-          email: 'igor_goncalves_ferrari@hotmail.com',
-        });
-      });
-    }
-
     const response = await firstValueFrom(
       this.httpService
         .post<BuscaClienteApiResponse>(

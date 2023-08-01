@@ -7,6 +7,9 @@ import { BuscaClienteResponse } from './dtos/busca-cliente-response.dto';
 import { BuscaClienteApiResponse } from './dtos/busca-cliente-api-response.dto';
 import { BuscaBoletosReceberParams } from './dtos/busca-boletos-params.dto';
 import { BuscaBoletosReceberResponse } from './dtos/busca-boletos-response.dto';
+import { BoletoParams } from './dtos/boleto-params.dto';
+import { BoletoResponse } from './dtos/boleto-response.dto';
+import { BoletoApiResponse } from './dtos/boleto-api-response.dto';
 
 @Injectable()
 export class ApiClienteService {
@@ -64,5 +67,34 @@ export class ApiClienteService {
         )
         .pipe(map((res) => res.data)),
     );
+  }
+
+  async obtemBoleto(params: BoletoParams): Promise<BoletoResponse> {
+    const response = await firstValueFrom(
+      this.httpService
+        .post<BoletoApiResponse>(
+          `${process.env.API_CLIENTE_BASE}/get_boleto`,
+          {
+            boletos: params.boletoId,
+            juro: 'N',
+            multa: 'N',
+            tipo_boleto: 'arquivo',
+            atualiza_boleto: 'N',
+            base64: 'S',
+          },
+          {
+            headers: {
+              Authorization: `Basic ${process.env.API_CLIENTE_TOKEN}`,
+              ixcsoft: 'listar',
+            },
+            httpsAgent: new https.Agent({
+              rejectUnauthorized: false,
+            }),
+          },
+        )
+        .pipe(map((res) => res.data)),
+    );
+
+    return { conteudo: response };
   }
 }

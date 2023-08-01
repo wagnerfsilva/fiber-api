@@ -16,9 +16,9 @@ export class LoginService {
   ) {}
 
   async login(body: SolicitaCodigoLoginBody): Promise<void> {
-    const email = await this.apiClienteService.buscaCliente(body);
+    const clienteResponse = await this.apiClienteService.buscaCliente(body);
 
-    if (!email) return;
+    if (!clienteResponse) return;
 
     // gera codigo aleatorio
     const codigo = this.utilsService.geraCodigoAleatorio();
@@ -70,9 +70,13 @@ export class LoginService {
       },
     });
 
+    const clienteResponse = await this.apiClienteService.buscaCliente(body);
+
+    if (!clienteResponse) throw new InternalServerErrorException();
+
     const payload = {
+      id: clienteResponse.id,
       cpf: body.cpf,
-      // TODO: colocar id do cliente
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET || '', {

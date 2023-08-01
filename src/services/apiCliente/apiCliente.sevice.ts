@@ -5,6 +5,8 @@ import { firstValueFrom, map } from 'rxjs';
 import { BuscaClienteParams } from './dtos/busca-cliente-params.dto';
 import { BuscaClienteResponse } from './dtos/busca-cliente-response.dto';
 import { BuscaClienteApiResponse } from './dtos/busca-cliente-api-response.dto';
+import { BuscaBoletosReceberParams } from './dtos/busca-boletos-params.dto';
+import { BuscaBoletosReceberResponse } from './dtos/busca-boletos-response.dto';
 
 @Injectable()
 export class ApiClienteService {
@@ -36,5 +38,31 @@ export class ApiClienteService {
     );
 
     return response.registros[0];
+  }
+
+  async buscaBoletosReceber(
+    params: BuscaBoletosReceberParams,
+  ): Promise<BuscaBoletosReceberResponse> {
+    return firstValueFrom(
+      this.httpService
+        .post<BuscaBoletosReceberResponse>(
+          `${process.env.API_CLIENTE_BASE}/fn_areceber`,
+          {
+            qtype: 'fn_areceber.id',
+            query: params.id,
+            oper: '=',
+          },
+          {
+            headers: {
+              Authorization: `Basic ${process.env.API_CLIENTE_TOKEN}`,
+              ixcsoft: 'listar',
+            },
+            httpsAgent: new https.Agent({
+              rejectUnauthorized: false,
+            }),
+          },
+        )
+        .pipe(map((res) => res.data)),
+    );
   }
 }

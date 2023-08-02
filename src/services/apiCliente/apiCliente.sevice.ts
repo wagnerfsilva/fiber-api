@@ -51,7 +51,7 @@ export class ApiClienteService {
         .post<BuscaBoletosReceberResponse>(
           `${process.env.API_CLIENTE_BASE}/fn_areceber`,
           {
-            qtype: 'fn_areceber.id',
+            qtype: 'fn_areceber.id_cliente',
             query: params.id,
             oper: '=',
           },

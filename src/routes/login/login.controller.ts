@@ -1,9 +1,22 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  HttpCode,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCookieAuth,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LoginService } from './login.service';
 import { SolicitaCodigoLoginBody } from './dtos/solicita-codigo-login-body.dto';
 import { ValidaCodigoLoginBody } from './dtos/valida-codigo-login-body.dto';
 import { ValidaCodigoLoginResponse } from './dtos/valida-codigo-login-response.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Login')
 @Controller('login')
@@ -29,5 +42,18 @@ export class LoginController {
     @Body() body: ValidaCodigoLoginBody,
   ): Promise<ValidaCodigoLoginResponse> {
     return this.loginService.validaCodigo(body);
+  }
+
+  @ApiResponse({
+    description: 'Token valido',
+    status: 201,
+  })
+  @ApiCookieAuth()
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(201)
+  @Get('valida_token')
+  async validaToken(): Promise<void> {
+    return undefined;
   }
 }

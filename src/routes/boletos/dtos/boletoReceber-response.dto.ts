@@ -1,4 +1,5 @@
 export class BoletoReceber {
+  id: string;
   nn_boleto: string;
   data_vencimento: string;
   valor: string;

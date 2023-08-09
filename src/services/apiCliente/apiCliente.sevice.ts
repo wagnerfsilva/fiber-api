@@ -17,7 +17,7 @@ export class ApiClienteService {
 
   async buscaCliente(
     params: BuscaClienteParams,
-  ): Promise<BuscaClienteResponse> {
+  ): Promise<BuscaClienteResponse | undefined> {
     const response = await firstValueFrom(
       this.httpService
         .post<BuscaClienteApiResponse>(
@@ -39,6 +39,8 @@ export class ApiClienteService {
         )
         .pipe(map((res) => res.data)),
     );
+
+    if (!response.registros?.length) return undefined;
 
     return response.registros[0];
   }

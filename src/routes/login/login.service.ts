@@ -6,6 +6,8 @@ import { CodigosValidaEmailRepositorio } from 'src/repositorios/codigosValidaEma
 import { UtilsService } from 'src/utils/utils/utils.service';
 import { ValidaCodigoLoginBody } from './dtos/valida-codigo-login-body.dto';
 import { ValidaCodigoLoginResponse } from './dtos/valida-codigo-login-response.dto';
+import { SESService } from 'src/utils/aws/SES/ses.service';
+import { TemplatesEmailService } from 'src/utils/templatesEmail/templatesEmail.service';
 
 @Injectable()
 export class LoginService {
@@ -13,6 +15,8 @@ export class LoginService {
     private readonly apiClienteService: ApiClienteService,
     private readonly codigosValidaEmailRepositorio: CodigosValidaEmailRepositorio,
     private readonly utilsService: UtilsService,
+    private readonly sesService: SESService,
+    private readonly templatesEmailService: TemplatesEmailService,
   ) {}
 
   async login(body: SolicitaCodigoLoginBody): Promise<void> {
@@ -33,7 +37,18 @@ export class LoginService {
       },
     });
 
-    // TODO: enviar e-mail com o codigo para o usuario
+    const templateEmail = this.templatesEmailService.enviaCodigoLogin({
+      codigo: codigo.toString(),
+    });
+
+    this.sesService.enviaEmail({
+      configEmail: {
+        source: process.env.AWS_SES_SOURCE || '',
+        toAddresses: clienteResponse.email,
+        subject: `Acesso ${process.env.NOME_APLICACAO}`,
+        body: templateEmail,
+      },
+    });
   }
 
   async validaCodigo(

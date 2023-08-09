@@ -8,6 +8,8 @@ import {
 @Injectable()
 export class ValidaCPF implements ValidatorConstraintInterface {
   validate(value: any): boolean {
+    if (!value) return false;
+
     const cpfLimpo = value.replace(/\D/g, ''); // Remove caracteres não numéricos
     if (cpfLimpo.length !== 11 || !/^\d{11}$/.test(cpfLimpo)) {
       return false; // Verifica se o CPF tem 11 dígitos numéricos

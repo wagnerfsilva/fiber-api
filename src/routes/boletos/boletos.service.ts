@@ -18,9 +18,11 @@ export class BoletosService {
     return {
       boletos: boletosReceber.registros.map((registro) => ({
         id: registro.id,
+        gateway_link: registro.gateway_link,
         data_vencimento: registro.data_vencimento,
         nn_boleto: registro.nn_boleto,
         valor: registro.valor,
+        linha_digitavel: registro.linha_digitavel,
       })),
     };
   }

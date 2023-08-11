@@ -18,6 +18,7 @@ class BoletosReceber {
   id_cliente: string;
   pagamento_valor: string;
   pagamento_data: string;
+  linha_digitavel: string;
 }
 
 export class BuscaBoletosReceberResponse {

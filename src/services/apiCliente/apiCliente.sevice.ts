@@ -15,6 +15,20 @@ import { BoletoApiResponse } from './dtos/boleto-api-response.dto';
 export class ApiClienteService {
   constructor(private readonly httpService: HttpService) {}
 
+  private trataCPF(value: string) {
+    const novoValor: string[] = [];
+
+    Array.from(value.replace(/\D/g, '')).forEach((numero, index) => {
+      novoValor.push(numero);
+
+      if ([2, 5].includes(index)) novoValor.push('.');
+
+      if (index === 8) novoValor.push('-');
+    });
+
+    return novoValor.join('');
+  }
+
   async buscaCliente(
     params: BuscaClienteParams,
   ): Promise<BuscaClienteResponse | undefined> {
@@ -24,7 +38,7 @@ export class ApiClienteService {
           `${process.env.API_CLIENTE_BASE}/cliente`,
           {
             qtype: 'cliente.cnpj_cpf',
-            query: params.cpf,
+            query: this.trataCPF(params.cpf),
             oper: '=',
           },
           {
